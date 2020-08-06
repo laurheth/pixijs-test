@@ -41671,11 +41671,13 @@ function addChoiceButton(sceneIndex, text, xPos, yPos) {
     newText.x = xPos - newText.width / 2;
     newText.y = yPos;
     newText.interactive = true;
-    // Handle click
-    newText.addListener('click', function () {
+    var clickListener = function () {
         scenes.forEach(function (scene) { return scene.visible = false; });
         scenes[sceneIndex].visible = true;
-    });
+    };
+    // Handle click
+    newText.addListener('click', clickListener);
+    newText.addListener('touchstart', clickListener);
     // Mouse over / off
     newText.addListener('mouseover', function () {
         newText.style = { fill: '#ffff00' };
