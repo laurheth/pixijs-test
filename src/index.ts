@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import './deckScene.ts';
 import deckScene from './deckScene';
+import textImageScene from './textImageScene';
 
 // Initialize app
 const app = new PIXI.Application({
@@ -39,9 +40,15 @@ function setup() {
 
     // Setup the deck scene
     scenes.push(deckScene.setup(loader,window.innerWidth));
+    deckScene.scene.visible = false;
+
+    // Setup the textImage scene
+    scenes.push(textImageScene.setup(loader,window.innerWidth));
 
     app.stage.addChild(scenes[0]);
+    app.stage.addChild(scenes[1]);
     scenes[0].y = 40;
+    scenes[1].y = 40;
 
     app.ticker.add(delta => gameLoop(delta));
 }
@@ -51,7 +58,8 @@ function gameLoop(delta:number) {
     // Display current frames per second
     fpsText.text = `FPS : ${app.ticker.FPS.toFixed(1)}`;
 
-    deckScene.play(delta);
+    // deckScene.play(delta);
+    textImageScene.play(delta);
 
 }
 
