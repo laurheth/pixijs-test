@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import './deckScene.ts';
 import deckScene from './deckScene';
 import textImageScene from './textImageScene';
+import fire from './fire';
 
 // Initialize app
 const app = new PIXI.Application({
@@ -28,6 +29,7 @@ const loader = new PIXI.Loader();
 loader
     .add("assets/testSprite.png")
     .add("assets/smileEmoticon.png")
+    .add("assets/fireParticle.png")
     .load(setup);
 
 let fpsText: PIXI.Text;
@@ -40,15 +42,20 @@ function setup() {
 
     // Setup the deck scene
     scenes.push(deckScene.setup(loader,window.innerWidth));
-    deckScene.scene.visible = false;
 
     // Setup the textImage scene
     scenes.push(textImageScene.setup(loader,window.innerWidth));
 
-    app.stage.addChild(scenes[0]);
-    app.stage.addChild(scenes[1]);
-    scenes[0].y = 40;
-    scenes[1].y = 40;
+    // Setup the fire scene
+    scenes.push(fire.setup(loader,window.innerWidth, window.innerHeight));
+
+    scenes.forEach(scene=>{
+        app.stage.addChild(scene);
+        scene.y = 40;
+        scene.visible = false;
+    });
+
+    scenes[2].visible = true;
 
     app.ticker.add(delta => gameLoop(delta));
 }
@@ -58,9 +65,16 @@ function gameLoop(delta:number) {
     // Display current frames per second
     fpsText.text = `FPS : ${app.ticker.FPS.toFixed(1)}`;
 
-    // deckScene.play(delta);
-    textImageScene.play(delta);
-
+    // Update scenes
+    if (scenes[0].visible) {
+        deckScene.play(delta);
+    }
+    else if (scenes[1].visible) {
+        textImageScene.play(delta);
+    }
+    else if (scenes[2].visible) {
+        fire.play(delta);
+    }
 }
 
 // Append app to the page
