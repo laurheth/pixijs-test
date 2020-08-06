@@ -17,7 +17,7 @@ app.renderer.autoDensity = true;
 app.renderer.resize(window.innerWidth, window.innerHeight);
 
 // Set a background color and enable zIndex sorting for children
-app.renderer.backgroundColor = 0x009900;
+app.renderer.backgroundColor = 0x666666;
 app.stage.sortableChildren=true;
 
 // Initialize array of scenes
@@ -55,9 +55,40 @@ function setup() {
         scene.visible = false;
     });
 
-    scenes[2].visible = true;
+    // Default to showing the deck-of-cards demo
+    scenes[0].visible = true;
+
+    // Add buttons here
+    addChoiceButton(2,"Show Fire Demo", window.innerWidth/2, window.innerHeight - 50);
+    addChoiceButton(1,"Show Image + Text Demo", window.innerWidth/2, window.innerHeight - 80);
+    addChoiceButton(0,"Show Deck of Sprites Demo", window.innerWidth/2, window.innerHeight - 110);
+
+
 
     app.ticker.add(delta => gameLoop(delta));
+}
+
+// Add some text to click on
+function addChoiceButton(sceneIndex: number, text: string, xPos: number, yPos: number) {
+    const newText = new PIXI.Text(text,{fill:'#ffffff'});
+    app.stage.addChild(newText);
+    newText.x = xPos - newText.width / 2;
+    newText.y = yPos;
+    newText.interactive=true;
+
+    // Handle click
+    newText.addListener('click',()=>{
+        scenes.forEach(scene=>scene.visible=false);
+        scenes[sceneIndex].visible=true;
+    });
+
+    // Mouse over / off
+    newText.addListener('mouseover',()=>{
+        newText.style = {fill:'#ffff00'};
+    });
+    newText.addListener('mouseout',()=>{
+        newText.style = {fill:'#ffffff'};
+    });
 }
 
 // Function to run for every timestep, of size "delta"

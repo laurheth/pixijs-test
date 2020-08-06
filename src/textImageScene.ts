@@ -23,7 +23,7 @@ function combineStringsSprites(array : Array<PIXI.Sprite | string>, fontSize: nu
         }
         else {
             // Generate the text object
-            toAdd = new PIXI.Text(item,{fontSize: fontSize});
+            toAdd = new PIXI.Text(item,{fontSize: fontSize,fill:'#ffffff'});
         }
         // Add to the container
         container.addChild(toAdd);
@@ -62,6 +62,7 @@ const textImageScene = {
     setup: function(loader: PIXI.Loader, width: number) {
         this.loader = loader;
         this.width = width;
+        this.newText();
         return this.scene;
     },
 

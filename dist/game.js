@@ -41627,7 +41627,7 @@ app.renderer.view.style.display = "block";
 app.renderer.autoDensity = true;
 app.renderer.resize(window.innerWidth, window.innerHeight);
 // Set a background color and enable zIndex sorting for children
-app.renderer.backgroundColor = 0x009900;
+app.renderer.backgroundColor = 0x666666;
 app.stage.sortableChildren = true;
 // Initialize array of scenes
 // 0 == card stack, 1 == text + sprite intermingling, 2 == fire
@@ -41656,8 +41656,33 @@ function setup() {
         scene.y = 40;
         scene.visible = false;
     });
-    scenes[2].visible = true;
+    // Default to showing the deck-of-cards demo
+    scenes[0].visible = true;
+    // Add buttons here
+    addChoiceButton(2, "Show Fire Demo", window.innerWidth / 2, window.innerHeight - 50);
+    addChoiceButton(1, "Show Image + Text Demo", window.innerWidth / 2, window.innerHeight - 80);
+    addChoiceButton(0, "Show Deck of Sprites Demo", window.innerWidth / 2, window.innerHeight - 110);
     app.ticker.add(function (delta) { return gameLoop(delta); });
+}
+// Add some text to click on
+function addChoiceButton(sceneIndex, text, xPos, yPos) {
+    var newText = new PIXI.Text(text, { fill: '#ffffff' });
+    app.stage.addChild(newText);
+    newText.x = xPos - newText.width / 2;
+    newText.y = yPos;
+    newText.interactive = true;
+    // Handle click
+    newText.addListener('click', function () {
+        scenes.forEach(function (scene) { return scene.visible = false; });
+        scenes[sceneIndex].visible = true;
+    });
+    // Mouse over / off
+    newText.addListener('mouseover', function () {
+        newText.style = { fill: '#ffff00' };
+    });
+    newText.addListener('mouseout', function () {
+        newText.style = { fill: '#ffffff' };
+    });
 }
 // Function to run for every timestep, of size "delta"
 function gameLoop(delta) {
@@ -42950,7 +42975,7 @@ function combineStringsSprites(array, fontSize, maxWidth) {
         }
         else {
             // Generate the text object
-            toAdd = new PIXI.Text(item, { fontSize: fontSize });
+            toAdd = new PIXI.Text(item, { fontSize: fontSize, fill: '#ffffff' });
         }
         // Add to the container
         container.addChild(toAdd);
@@ -42980,6 +43005,7 @@ var textImageScene = {
     setup: function (loader, width) {
         this.loader = loader;
         this.width = width;
+        this.newText();
         return this.scene;
     },
     // Each animation step
