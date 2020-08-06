@@ -76,11 +76,14 @@ function addChoiceButton(sceneIndex: number, text: string, xPos: number, yPos: n
     newText.y = yPos;
     newText.interactive=true;
 
-    // Handle click
-    newText.addListener('click',()=>{
+    const clickListener = ()=>{
         scenes.forEach(scene=>scene.visible=false);
         scenes[sceneIndex].visible=true;
-    });
+    };
+
+    // Handle click
+    newText.addListener('click',clickListener);
+    newText.addListener('touchstart',clickListener);
 
     // Mouse over / off
     newText.addListener('mouseover',()=>{
