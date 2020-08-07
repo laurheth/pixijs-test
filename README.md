@@ -5,6 +5,8 @@ Some tests combining PixiJS, TypeScript, and Webpack. This includes:
 - A demonstration of a function combining text with a sprite. A random combination with a random font size is generated every two seconds.
 - A simple fire animation, using ten sprites in a PixiJS particle container.
 
+You can take a look at the [live version of this app here](https://laurheth.github.io/pixijs-test/).
+
 ## Installation
 
 You may need Node, TypeScript, TSLint, and http-server to be installed globally.
