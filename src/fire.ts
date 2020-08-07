@@ -17,10 +17,6 @@ class particle {
         this.frames=0;
         this.lifetime=lifetime;
         this.sprite.tint = 0xff0000;
-
-        // set pivot point
-        this.sprite.pivot.set(this.sprite.width/2, this.sprite.height/2);
-
         this.delay = delay;
         this.start();
     }
@@ -29,10 +25,13 @@ class particle {
     start() {
         this.sprite.x = this.startPosition[0];
         this.sprite.y = this.startPosition[1];
+        // A randomized initial velocity.
         this.speed = [
             2*(Math.random() - Math.random()),
             Math.random() - Math.random()
         ];
+        // Subtract lifetime instead of just setting to "0"
+        // Avoids particles becoming clumped if frames get dropped at any stage.
         if (this.frames>0) {
             this.frames-=this.lifetime;
         }
@@ -42,6 +41,7 @@ class particle {
     // Update
     update(delta: number) {
         this.frames += delta;
+        // Has the initial delay time passed?
         if (this.frames < this.delay) {
             return;
         }
@@ -68,6 +68,7 @@ class particle {
 }
 
 const fire = {
+    // Use a particle container! Way more efficient for particle effects.
     scene: <PIXI.ParticleContainer> new PIXI.ParticleContainer(10,{tint:true}),
 
     particles: <Array<particle>> [],
@@ -82,6 +83,7 @@ const fire = {
                     loader.resources["assets/fireParticle.png"].texture
                 ),
                 30,
+                // Set an initial delay, scaled by i, so that the particles are not all clumped.
                 3*i
             );
             // Add to the scene
@@ -93,6 +95,7 @@ const fire = {
         return this.scene;
     },
 
+    // Update every particle
     play: function(delta: number) {
         this.particles.forEach(particle => particle.update(delta));
     }

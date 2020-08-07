@@ -64,7 +64,7 @@ function setup() {
     addChoiceButton(0,"Show Deck of Sprites Demo", window.innerWidth/2, window.innerHeight - 110);
 
 
-
+    // Start the game loop.
     app.ticker.add(delta => gameLoop(delta));
 }
 
@@ -99,7 +99,7 @@ function gameLoop(delta:number) {
     // Display current frames per second
     fpsText.text = `FPS : ${app.ticker.FPS.toFixed(1)}`;
 
-    // Update scenes
+    // Update the visible scene
     if (scenes[0].visible) {
         deckScene.play(delta);
     }
